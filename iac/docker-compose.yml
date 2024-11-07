@@ -20,7 +20,7 @@ services:
       - DB_PORT=3306
       - DB_USER=root
       - DB_PASSWORD=password
-      - DB_NAME=app_db
+      - DB_NAME=db
       - TEST_DB_HOST=test_db  # テスト用DBのホスト
       - TEST_DB_PORT=3306
       - TEST_DB_USER=root
@@ -35,7 +35,7 @@ services:
     image: mysql:8.0
     environment:
       MYSQL_ROOT_PASSWORD: password
-      MYSQL_DATABASE: app_db
+      MYSQL_DATABASE: db
     ports:
       - "3309:3306"
     networks:
