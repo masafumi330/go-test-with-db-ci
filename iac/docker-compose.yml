@@ -1,0 +1,66 @@
+version: '3.8'
+name: go-test-with-db-ci
+services:
+  web:
+    container_name: web
+    hostname: web
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    volumes:
+      - $PWD/../app:/app
+    working_dir: /app
+    command: go run cmd/server/main.go
+    ports:
+      - "8888:8000"
+    networks:
+      - app-network
+    environment:
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_USER=root
+      - DB_PASSWORD=password
+      - DB_NAME=app_db
+      - TEST_DB_HOST=test_db  # テスト用DBのホスト
+      - TEST_DB_PORT=3306
+      - TEST_DB_USER=root
+      - TEST_DB_PASSWORD=password
+      - TEST_DB_NAME=test_db
+    depends_on:
+      - db
+
+  db:
+    container_name: db
+    hostname: db
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: app_db
+    ports:
+      - "3309:3306"
+    networks:
+      - app-network
+    volumes:
+      - db_data:/var/lib/mysql
+
+  test_db:
+    container_name: test_db
+    hostname: test_db
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: test_db
+    ports:
+      - "3310:3306"
+    networks:
+      - app-network
+    volumes:
+      - test_db_data:/var/lib/mysql
+
+volumes:
+  db_data:
+  test_db_data:
+
+networks:
+  app-network:
+    driver: bridge
