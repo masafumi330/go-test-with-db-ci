@@ -6,14 +6,14 @@ import (
 )
 
 type TodoRepository struct {
-	DB *sql.DB
+	db *sql.DB
 }
 
 func NewTodoRepository(db *sql.DB) *TodoRepository {
-	return &TodoRepository{DB: db}
+	return &TodoRepository{db: db}
 }
 
 func (r *TodoRepository) Create(todo *domain.Todo) error {
-	_, err := r.DB.Exec("INSERT INTO todos (title) VALUES (?)", todo.Title)
+	_, err := r.db.Exec("INSERT INTO todos (title) VALUES (?)", todo.Title)
 	return err
 }
