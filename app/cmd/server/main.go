@@ -25,6 +25,7 @@ func main() {
 	e := echo.New()
 	e.GET("/todo/:id", todoHandler.GetTodo)
 	e.POST("/todo", todoHandler.CreateTodo)
+	e.PUT("/todo/:id", todoHandler.UpdateTodo)
 
 	e.Start(":8000")
 }

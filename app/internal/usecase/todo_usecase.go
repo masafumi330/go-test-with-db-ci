@@ -28,9 +28,25 @@ func (u *TodoUsecase) GetTodoByID(id uint) (*domain.Todo, error) {
 }
 
 func (u *TodoUsecase) CreateTodo(title string) error {
-	todo, err := domain.NewTodo(title)
+	todo, err := domain.NewTodo(title, false)
 	if err != nil {
 		return err
 	}
 	return u.repo.Create(todo)
+}
+
+func (u *TodoUsecase) UpdateTodo(id uint, title string, done bool) error {
+	todo, err := u.repo.GetByID(domain.ToDoID(id))
+	if err != nil {
+		if errors.Is(err, domain.ErrTodoNotFound) {
+			return ErrTodoNotFound
+		}
+		return err
+	}
+
+	newTodo, err := domain.NewTodo(title, done, domain.WithID(todo.ID))
+	if err != nil {
+		return err
+	}
+	return u.repo.Update(newTodo)
 }

@@ -30,3 +30,8 @@ func (r *TodoRepository) Create(todo *domain.Todo) error {
 	_, err := r.db.Exec("INSERT INTO todos (title) VALUES (?)", todo.Title)
 	return err
 }
+
+func (r *TodoRepository) Update(todo *domain.Todo) error {
+	_, err := r.db.Exec("UPDATE todos SET title = ?, done = ? WHERE id = ?", todo.Title, todo.Done, todo.ID)
+	return err
+}

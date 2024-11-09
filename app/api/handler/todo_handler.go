@@ -49,3 +49,29 @@ func (h *TodoHandler) CreateTodo(c echo.Context) error {
 
 	return c.JSON(http.StatusCreated, map[string]string{"message": "Todo created"})
 }
+
+func (h *TodoHandler) UpdateTodo(c echo.Context) error {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid ID"})
+	}
+
+	var req struct {
+		Title string `json:"title" validate:"required"`
+		Done  bool   `json:"done"`
+	}
+
+	if err := c.Bind(&req); err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid request"})
+	}
+
+	err = h.usecase.UpdateTodo(uint(id), req.Title, req.Done)
+	if err != nil {
+		if err == usecase.ErrTodoNotFound {
+			return c.JSON(http.StatusNotFound, map[string]string{"error": "Todo not found"})
+		}
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to update todo"})
+	}
+
+	return c.JSON(http.StatusCreated, map[string]string{"message": "Todo created"})
+}
