@@ -6,11 +6,16 @@ import (
 	"go-test-with-db-ci/internal/domain"
 )
 
-type TodoRepository struct {
-	db *sql.DB
+type CustomDB interface {
+	Exec(query string, args ...interface{}) (sql.Result, error)
+	QueryRow(query string, args ...interface{}) *sql.Row
 }
 
-func NewTodoRepository(db *sql.DB) *TodoRepository {
+type TodoRepository struct {
+	db CustomDB
+}
+
+func NewTodoRepository(db CustomDB) *TodoRepository {
 	return &TodoRepository{db: db}
 }
 
