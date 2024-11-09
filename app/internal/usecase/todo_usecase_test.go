@@ -17,11 +17,11 @@ func TestMain(m *testing.M) {
 	// setup
 	var err error
 	db, err = sql.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s:%s)/%s",
-		os.Getenv("TEST_DB_USER"),
-		os.Getenv("TEST_DB_PASSWORD"),
-		os.Getenv("TEST_DB_HOST"),
-		os.Getenv("TEST_DB_PORT"),
-		os.Getenv("TEST_DB_NAME"),
+		"root",
+		"password",
+		"localhost", // specify host as localhost
+		"3310",      // specify port as 3310
+		"test_db",
 	))
 	if err != nil {
 		panic(err)
