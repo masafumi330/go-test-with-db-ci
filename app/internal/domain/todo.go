@@ -4,13 +4,19 @@ import (
 	"errors"
 )
 
-var ErrEmptyTitle = errors.New("empty title")
+var (
+	ErrTodoNotFound = errors.New("todo not found")
+	ErrEmptyTitle   = errors.New("empty title")
+)
 
-type Todo struct {
-	ID    uint
-	Title string
-	Done  bool
-}
+type (
+	ToDoID uint
+	Todo   struct {
+		ID    ToDoID `db:"id"`
+		Title string `db:"title"`
+		Done  bool   `db:"done"`
+	}
+)
 
 func NewTodo(
 	title string,

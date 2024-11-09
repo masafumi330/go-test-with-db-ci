@@ -23,10 +23,8 @@ func main() {
 	todoHandler := handler.NewTodoHandler(*usecase)
 
 	e := echo.New()
+	e.GET("/todo/:id", todoHandler.GetTodo)
 	e.POST("/todo", todoHandler.CreateTodo)
-	e.GET("/todo", func(c echo.Context) error {
-		return c.String(200, "Hello, World!")
-	})
 
 	e.Start(":8000")
 }

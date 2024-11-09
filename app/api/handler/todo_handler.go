@@ -3,6 +3,7 @@ package handler
 import (
 	"go-test-with-db-ci/internal/usecase"
 	"net/http"
+	"strconv"
 
 	"github.com/labstack/echo/v4"
 )
@@ -13,6 +14,23 @@ type TodoHandler struct {
 
 func NewTodoHandler(u usecase.TodoUsecase) *TodoHandler {
 	return &TodoHandler{usecase: u}
+}
+
+func (h *TodoHandler) GetTodo(c echo.Context) error {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid ID"})
+	}
+
+	todo, err := h.usecase.GetTodoByID(uint(id))
+	if err != nil {
+		if err == usecase.ErrTodoNotFound {
+			return c.JSON(http.StatusNotFound, map[string]string{"error": "Todo not found"})
+		}
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to get todo"})
+	}
+
+	return c.JSON(http.StatusOK, todo)
 }
 
 func (h *TodoHandler) CreateTodo(c echo.Context) error {
