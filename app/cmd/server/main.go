@@ -26,6 +26,7 @@ func main() {
 	e.GET("/todo/:id", todoHandler.GetTodo)
 	e.POST("/todo", todoHandler.CreateTodo)
 	e.PUT("/todo/:id", todoHandler.UpdateTodo)
+	e.DELETE("/todo/:id", todoHandler.DeleteTodo)
 
 	e.Start(":8000")
 }

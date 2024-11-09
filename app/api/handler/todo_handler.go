@@ -75,3 +75,17 @@ func (h *TodoHandler) UpdateTodo(c echo.Context) error {
 
 	return c.JSON(http.StatusCreated, map[string]string{"message": "Todo created"})
 }
+
+func (h *TodoHandler) DeleteTodo(c echo.Context) error {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid ID"})
+	}
+
+	err = h.usecase.DeleteTodo(uint(id))
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to delete todo"})
+	}
+
+	return c.JSON(http.StatusOK, map[string]string{"message": "Todo deleted"})
+}

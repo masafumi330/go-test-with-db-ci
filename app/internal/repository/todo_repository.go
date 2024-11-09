@@ -35,3 +35,11 @@ func (r *TodoRepository) Update(todo *domain.Todo) error {
 	_, err := r.db.Exec("UPDATE todos SET title = ?, done = ? WHERE id = ?", todo.Title, todo.Done, todo.ID)
 	return err
 }
+
+func (r *TodoRepository) Delete(id domain.ToDoID) error {
+	_, err := r.db.Exec("DELETE FROM todos WHERE id = ?", id)
+	if err != nil && !errors.Is(err, sql.ErrNoRows) {
+		return err
+	}
+	return nil
+}

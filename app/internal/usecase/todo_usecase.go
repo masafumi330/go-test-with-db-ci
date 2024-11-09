@@ -50,3 +50,7 @@ func (u *TodoUsecase) UpdateTodo(id uint, title string, done bool) error {
 	}
 	return u.repo.Update(newTodo)
 }
+
+func (u *TodoUsecase) DeleteTodo(id uint) error {
+	return u.repo.Delete(domain.ToDoID(id))
+}
